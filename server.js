@@ -17,6 +17,8 @@ app.use(express.json());
 app.use('/api', testimonialsRoutes);
 app.use('/api', seatsRoutes);
 app.use('/api', concertsRoutes);
+
+
 app.use(express.static(path.join(__dirname, '/client/build')));
 
 app.get('*', (req,res) => {
