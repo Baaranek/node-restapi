@@ -12,11 +12,12 @@ router.route('/seats/:id').get((req, res) => {
 });
 
 router.route('/seats').post((req, res) => {
-  if(db.find(elem => elem.day == req.params.day && elem.seat == req.params.seat)) 
+  if(db.seats.find(elem => elem.day == req.params.day && elem.seat == req.params.seat)) 
     {res.send({message: "Slot is already taken"})}
   else{
     req.body.id = uuidv1();
     db.seats.push(req.body);
+    req.io.emit('updateDataSeats', (db.seats))
   }
 });
 
