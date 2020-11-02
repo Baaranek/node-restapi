@@ -1,37 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
-const { v1: uuidv1 } = require('uuid');
+const SeatController = require('../controllers/seat.controller');
 
-router.route('/seats').get((req, res) => {
-  res.send(db.seats);
-});
+router.get('/seats', SeatController.getAll);
 
-router.route('/seats/:id').get((req, res) => {
-  res.send(db.seats.filter( elem => elem.id == req.params.id));
-});
+router.get('/seats/:id', SeatController.getById);
 
-router.route('/seats').post((req, res) => {
-  if(db.seats.find(elem => elem.day == req.params.day && elem.seat == req.params.seat)) 
-    {res.send({message: "Slot is already taken"})}
-  else{
-    req.body.id = uuidv1();
-    db.seats.push(req.body);
-    req.io.emit('updateDataSeats', (db.seats))
-  }
-});
+router.post('/seats', SeatController.addNew);
 
-router.route('/seats/:id').put((req, res) => {
-  db.seats.find( item => item.id == req.params.id).day = req.body.day;
-  db.seats.find( item => item.id == req.params.id).seat = req.body.seat;
-  db.seats.find( item => item.id == req.params.id).client = req.body.client;
-  db.seats.find( item => item.id == req.params.id).email = req.body.email;
-});
+router.put('/seats/:id', SeatController.updateOne);
 
-router.route('/seats/:id').delete((req, res) => {
-  const deletedElem = db.seats.find( item => item.id == req.params.id );
-  const indexOfDeletedElem = db.seats.indexOf(deletedElem);
-  db.seats.splice(1, indexOfDeletedElem);
-});
+router.delete('/seats/:id', SeatController.updateOne);
 
 module.exports = router;
