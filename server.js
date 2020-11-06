@@ -50,3 +50,5 @@ const io = socket(server);
 io.on('connection', (socket) => {
   console.log('connected');
 });
+
+module.exports = server;
